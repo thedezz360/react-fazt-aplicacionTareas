@@ -1,28 +1,37 @@
 import "./App.css";
 import { useState } from "react";
+import { TaskCreator } from "./components/TaskCreator";
 
 function App() {
-  const [newTaskName, setNewTaskName] = useState("");
 
-  const handleSubmit = (e) =>{
-    e.preventDefault();
-    //save task in localStore
-    localStorage.setItem('tasks', newTaskName)
-    //clear input
-    setNewTaskName('')
+  const [tasksItems, setTasksItems] = useState([
+    { name: "mi primer tarea", done: false },
+    { name: "mi segunda tarea", done: false },
+    { name: "mi tercera tarea", done: false },
+  ]);
+
+  function createNewTask(taskName){
+    setTasksItems([...tasksItems, {name:taskName, done: false } ])
   }
 
   return (
     <div className="App">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Enter a new task"
-          onChange={(e) => setNewTaskName(e.target.value)}
-          value={newTaskName}
-        />
-        <button>Save task</button>
-      </form>
+      <TaskCreator createNewTask={createNewTask} />
+
+      <table>
+        <thead>
+          <tr><td>Task</td></tr>
+        </thead>
+        <tbody>
+          {tasksItems.map((task) => (
+            <tr key={task.name}>
+              <td>
+                {task.name}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
